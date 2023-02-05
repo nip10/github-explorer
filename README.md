@@ -1,38 +1,46 @@
+# GitHub Explorer
+
+This is a simple app that allows you to search for GitHub repositories and bookmark them.
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
 
 ```bash
-npm run dev
-# or
+yarn
+```
+
+Run the development server:
+
+```bash
 yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Libraries & Tools
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Framework: [Next.js](https://nextjs.org/)
+- Authentication & Database: [Supabase](https://supabase.io/)
+- Form: [React Hook Form](https://react-hook-form.com/)
+- Validation: [Zod](https://zod.dev/)
+- Styling: [Styled Components](https://styled-components.com/)
+- Headless UI Components: [Radix UI](https://www.radix-ui.com/)
+- Headless UI Components: [Embla Carousel](https://davidcetinkaya.github.io/embla-carousel/)
+- Async state management [TanStack Query](https://tanstack.com/query/latest)
+- HTTP Client: [Ky](https://github.com/sindresorhus/ky)
+- GitHub API Client: [Octokit](https://octokit.github.io/rest.js/v18)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Supabase
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Run the `.sql` files in the Supabase SQL Editor.
+- Enable Insert & Delete replication for the `bookmarks` table (Database > Replication > supabase_realtime)
+- Auto generate database types using the Supabase CLI
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
+### My approach to code challenges
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- I like to have a time limit for code challenges. I try to have a good balance between getting a good result and not spending too much time on it.
+- I like to explore and learn new libraries and tools. I find that this is a good oportunity to learn and improve my skills, and always take something new with me regardless of the outcome.
