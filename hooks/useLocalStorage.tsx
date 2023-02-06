@@ -3,18 +3,19 @@ import { useEffect, useState } from "react";
 // A modified version of useLocalStorage from usehooks.com that works with SSR
 // https://usehooks.com/useLocalStorage/
 // https://www.joshwcomeau.com/react/the-perils-of-rehydration/#a-noble-but-flawed-attempt
+// Ended up using dynamic import with SSR disabled for now
 function useLocalStorage<T>(key: string, initialValue: T) {
-  const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
+  // const [hasMounted, setHasMounted] = useState(false);
+  // useEffect(() => {
+  //   setHasMounted(true);
+  // }, []);
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (!hasMounted) return initialValue;
-    // if (typeof window === "undefined") {
-    //   return initialValue;
-    // }
+    // if (!hasMounted) return initialValue;
+    if (typeof window === "undefined") {
+      return initialValue;
+    }
     try {
       // Get from local storage by key
       const item = window.localStorage.getItem(key);

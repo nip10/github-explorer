@@ -2,9 +2,12 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useUser } from "@supabase/auth-helpers-react";
 import MyBookmarks from "@/components/MyBookmarks";
-import Topics from "@/components/Topics";
 import { BookmarksProvider } from "@/context/BookmarksContext";
+import dynamic from "next/dynamic";
 
+const DynamicTopics = dynamic(() => import("../components/Topics"), {
+  ssr: false,
+});
 const Home: NextPage = () => {
   const user = useUser();
 
@@ -15,7 +18,7 @@ const Home: NextPage = () => {
       </Head>
       <BookmarksProvider>
         {user && <MyBookmarks />}
-        <Topics />
+        <DynamicTopics />
       </BookmarksProvider>
     </>
   );

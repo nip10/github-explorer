@@ -5,17 +5,19 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 This project was created as a code challenge for [Sword Health](https://swordhealth.com/).
 
-Check it out live at [https://github-explorer-ten.vercel.app/](https://github-explorer-ten.vercel.app/);
+Check it out live at [https://github-explorer-lake-two.vercel.app/](https://github-explorer-lake-two.vercel.app/);
 
 ## Getting Started
 
-Install dependencies:
+1. Install dependencies:
 
 ```bash
 yarn
 ```
 
-Run the development server:
+2. Rename `.env.local.example` to `.env.local` and add the required keys.
+
+3. Run the development server:
 
 ```bash
 yarn dev
@@ -42,6 +44,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Enable Insert & Delete replication for the `bookmarks` table (Database > Replication > supabase_realtime)
 - Auto generate database types using the Supabase CLI
 
+## Deployment
+
+This project is deployed to Vercel via GitHub integration.
+Make sure to add the required env keys to the Vercel environment variables.
+
 ## Notes
 
 ### My approach to code challenges
@@ -64,3 +71,4 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Deployed to Vercel via GitHub integration
 - Change the GitHub API client to use GraphQL to reduce data usage and improve performance
 - Improve cache settings for the opengraph images
+- Improve lazy loading of images, add a blur up effect or a placeholder

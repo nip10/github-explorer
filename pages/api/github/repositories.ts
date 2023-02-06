@@ -4,7 +4,9 @@ import crypto from "crypto";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/db/types";
 
-const octokit = new Octokit();
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 
 const repositorySortBy = [
   "stars",
@@ -16,6 +18,24 @@ type RepositorySortBy = typeof repositorySortBy[number];
 
 const generateRandomString = (length: number = 16): string => {
   return crypto.randomBytes(length).toString("hex");
+};
+
+// Simple in-memory cache for the OG images (force update after 1 day old)
+const imgCache = new Map<string, { url: string; updatedAt: Date }>();
+const getOpenGraphImageUrl = (repoFullName: string): string => {
+  if (imgCache.has(repoFullName)) {
+    // Check if the image is older than 1 day
+    const updatedAt = imgCache.get(repoFullName)!.updatedAt;
+    const diff = new Date().getTime() - updatedAt.getTime();
+    if (diff < 1000 * 60 * 60 * 24) {
+      // Return the cached image
+      return imgCache.get(repoFullName)!.url;
+    }
+  }
+  // Generate a new image
+  const img = `https://opengraph.githubassets.com/${generateRandomString()}/${repoFullName}`;
+  imgCache.set(repoFullName, { url: img, updatedAt: new Date() });
+  return img;
 };
 
 export default async function handler(
@@ -62,9 +82,7 @@ export default async function handler(
       repoName: item.name,
       repoOwner: item.owner?.login,
       fullName: item.full_name,
-      image: `https://opengraph.githubassets.com/${generateRandomString()}/${
-        item.full_name
-      }`,
+      image: getOpenGraphImageUrl(item.full_name),
       url: item.html_url,
       bookmarkId: bookmarks.find(
         (bookmark) => bookmark.repoFullName === item.full_name
