@@ -72,3 +72,4 @@ Make sure to add the required env keys to the Vercel environment variables.
 - Change the GitHub API client to use GraphQL to reduce data usage and improve performance
 - Improve cache settings for the opengraph images
 - Improve lazy loading of images, add a blur up effect or a placeholder
+- Add infinite loading to the carousel
