@@ -55,9 +55,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Tried out Supabase (a Firebase open-source alternative) for authentication and database (and some "exotic" features like realtime replication and row level security).
 - The bookmarks are stored in the database, so they are not lost when the user logs out.
 - The bookmarks list "My Bookmarks", after the first load, is updated in realtime via Supabase's realtime replication. (for fun, this could just use the Bookmarks Context, but I wanted to try out the replication feature)
+- The selected topics and the sorting of each topic are saved in local storage.
 - Ended up not using a GitHub token, since the API is public and the rate limit is high enough. However, this was implemented in the backend, so it's easy to add it later while keeping the token secure.
 - The OpenGraph images for the repositories has a low rate limit, so behare of that.
 - Improve error handling and feedback to the user.
-- Add responsiveness
+- Improve responsiveness. Its usable on mobile, but not great. The bookmark feature depends on hover which is not available on mobile, so I ended up showing the bookmark toggle by default on mobile.
 - Make UI components more generic and reusable
 - Deployed to Vercel via GitHub integration
+- Change the GitHub API client to use GraphQL to reduce data usage and improve performance
+- Improve cache settings for the opengraph images

@@ -6,6 +6,9 @@ const Container = styled.main`
   margin: 0 auto;
   padding: 2rem 0;
   height: calc(100vh - ${HEADER_HEIGH_PX});
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 export default Container;

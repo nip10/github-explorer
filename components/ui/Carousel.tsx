@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import useEmblaCarousel, { type EmblaOptionsType } from "embla-carousel-react";
 import styled from "styled-components";
+import Image from "next/image";
 
 type PrevNextButtonPropType = {
   enabled: boolean;
@@ -28,8 +29,6 @@ const NextButton: React.FC<PrevNextButtonPropType> = ({ enabled, onClick }) => {
 };
 
 const SLIDE_SPACING_REM = "1rem";
-const SLIDE_SIZE_PERCENT = "33.3333%";
-const SLIDE_HEIGHT_REM = "14rem";
 
 const Embla = styled.div`
   position: relative;
@@ -44,7 +43,7 @@ const Container = styled.div`
   flex-direction: row;
   height: auto;
   min-height: 200px;
-  margin-left: calc(SLIDE_SPACING_REM * -1);
+  margin-left: calc(${SLIDE_SPACING_REM} * -1);
 `;
 
 const Bookmark = styled.div`
@@ -68,7 +67,7 @@ const Bookmark = styled.div`
 `;
 
 const Slide = styled.div`
-  flex: 0 0 ${SLIDE_SIZE_PERCENT};
+  flex: 0 0 33.3333%; // 3 slides
   min-width: 0;
   padding-left: ${SLIDE_SPACING_REM};
   position: relative;
@@ -81,13 +80,18 @@ const Slide = styled.div`
       display: flex;
     }
   }
-`;
-
-const SlideImg = styled.img`
-  display: block;
-  height: ${SLIDE_HEIGHT_REM};
-  width: 100%;
-  object-fit: contain;
+  @media (max-width: 1024px) {
+    flex: 0 0 50%; // 2 slides
+    > ${Bookmark} {
+      display: flex;
+    }
+  }
+  @media (max-width: 768px) {
+    flex: 0 0 100%; // 1 slide
+    > ${Bookmark} {
+      display: flex;
+    }
+  }
 `;
 
 const Button = styled.button`
@@ -185,6 +189,12 @@ const Carousel: React.FC<CarouselProps> = ({
     [emblaApi, onSlideClick]
   );
 
+  const numSlidesInView = useMemo(() => {
+    if (!emblaApi) return [];
+    const indexes = emblaApi.slidesInView();
+    return indexes.length;
+  }, [emblaApi]);
+
   return (
     <>
       <Embla>
@@ -195,7 +205,16 @@ const Carousel: React.FC<CarouselProps> = ({
                 key={slide.img}
                 onClick={() => onEmblaSlideClick(slide, index)}
               >
-                <SlideImg src={slide.img} alt={slide.alt} />
+                <Image
+                  src={slide.img}
+                  alt={slide.alt}
+                  fill
+                  style={{
+                    objectFit: "contain",
+                  }}
+                  priority={index < numSlidesInView}
+                  sizes="100vw"
+                />
                 {withBookmarks && (
                   <Bookmark
                     onClick={(e) => {

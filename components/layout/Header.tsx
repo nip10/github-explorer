@@ -27,6 +27,9 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+  }
 `;
 
 const Logo = styled(Link)`
@@ -34,6 +37,15 @@ const Logo = styled(Link)`
   font-weight: 700;
   color: ${({ theme }) => theme.colors.slate[800]};
   text-decoration: none;
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const InnerContainer = styled(HStack)`
+  @media (max-width: 768px) {
+    gap: 0;
+  }
 `;
 
 type LoggedInContentProps = {
@@ -92,7 +104,7 @@ const Header: React.FC = () => {
   return (
     <StyledHeader>
       <Container>
-        <HStack gap="2rem">
+        <InnerContainer gap="2rem">
           <Logo href="/">GitHub Explorer</Logo>
           <nav>
             <UnstlyedList>
@@ -105,8 +117,8 @@ const Header: React.FC = () => {
               </NavItem>
             </UnstlyedList>
           </nav>
-        </HStack>
-        <HStack gap="1rem">
+        </InnerContainer>
+        <InnerContainer gap="1rem">
           {user ? (
             <LoggedInContent
               username={profile?.username}
@@ -115,7 +127,7 @@ const Header: React.FC = () => {
           ) : (
             <LoggedOutContent />
           )}
-        </HStack>
+        </InnerContainer>
       </Container>
     </StyledHeader>
   );

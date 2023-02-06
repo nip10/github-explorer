@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useUser } from "@supabase/auth-helpers-react";
 import useRepositories, {
   type RepositorySortBy,
@@ -9,6 +9,7 @@ import Carousel, { type SlideType } from "@/components/ui/Carousel";
 import Dropdown, { type DropdownOption } from "@/components/ui/Dropdown";
 import { HStack, LoadingState } from "@/components/ui/Shared";
 import { useBookmarksContext } from "@/context/BookmarksContext";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 type TopicProps = {
   topic: string;
@@ -23,7 +24,10 @@ const repositorySortByOptions: DropdownOption<RepositorySortBy>[] = [
 
 const Topic: React.FC<TopicProps> = ({ topic }) => {
   const user = useUser();
-  const [sortBy, setSortBy] = useState<RepositorySortBy>("stars");
+  const [sortBy, setSortBy] = useLocalStorage<RepositorySortBy>(
+    `topicSortBy-${topic}`,
+    "stars"
+  );
   const { bookmarks } = useBookmarksContext();
 
   const { data: repositoriesData, isLoading } = useRepositories({

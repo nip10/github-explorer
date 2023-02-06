@@ -1,10 +1,10 @@
-import { useState } from "react";
 import Topic from "./Topic";
 import HiddenCheckbox, {
   type HiddenCheckboxProps,
 } from "@/components/ui/HiddenCheckbox";
 import Pill from "@/components/ui/Pill";
 import { EmptyState, HStack, Section, VStack } from "@/components/ui/Shared";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const supportedTopics = [
   "Vue",
@@ -17,10 +17,9 @@ const supportedTopics = [
 type SupportedTopics = typeof supportedTopics[number];
 
 const Topics: React.FC = () => {
-  const [selectedTopics, setSelectedTopics] = useState<SupportedTopics[]>([
-    "Vue",
-    "Go",
-  ]);
+  const [selectedTopics, setSelectedTopics] = useLocalStorage<
+    SupportedTopics[]
+  >("topics", ["Vue", "Go"]);
 
   const onTopicChange: HiddenCheckboxProps["onChange"] = (e) => {
     const { checked } = e.target;

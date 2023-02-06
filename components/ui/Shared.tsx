@@ -17,6 +17,7 @@ const HStack = styled.div<HStackProps>`
   align-items: center;
   flex-direction: row;
   gap: ${({ gap }) => gap ?? "0.5rem"};
+  flex-wrap: wrap;
 `;
 
 type VStackProps = {

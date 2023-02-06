@@ -6,6 +6,7 @@ const nextConfig = {
   },
   images: {
     domains: ["opengraph.githubassets.com"],
+    minimumCacheTTL: 60,
   },
 };
 
