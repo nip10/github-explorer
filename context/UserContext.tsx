@@ -1,45 +1,59 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useUser } from "@supabase/auth-helpers-react";
+import type { PostgrestError } from "@supabase/supabase-js";
+import useUpdateUserProfile from "@/lib/supabase/useUpdateUserProfile";
 import type { Database } from "@/db/types";
+import useUserProfile from "@/lib/supabase/useUserProfile";
 
 type UserContextType = {
-  profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
-  updateProfile: () => Promise<void>;
+  profile: Partial<Database["public"]["Tables"]["profiles"]["Row"]> | null;
+  updateProfile: ({
+    username,
+  }: {
+    username: string;
+  }) => Promise<{ error: PostgrestError } | undefined>;
   clearProfile: () => void;
 };
 
 const UserContext = createContext<UserContextType>({
   profile: null,
-  updateProfile: () => Promise.resolve(),
+  updateProfile: () => Promise.resolve(undefined),
   clearProfile: () => {},
 });
 
 const UserProvider = ({ children }: React.PropsWithChildren) => {
-  const supabaseClient = useSupabaseClient<Database>();
-  const user = useUser();
   const [profile, setProfile] = useState<UserContextType["profile"]>(null);
+  const user = useUser();
+  const userProfile = useUserProfile();
+  const supabaseUpdateProfile = useUpdateUserProfile();
 
-  const updateProfile = useCallback(async () => {
+  const fetchProfile = useCallback(async () => {
     if (!user) {
       return;
     }
-    const { data, error } = await supabaseClient
-      .from("profiles")
-      .select("*")
-      .eq("user_id", user.id)
-      .single();
-    if (error) {
-      console.error(error);
+    const userProfileResult = await userProfile();
+    if (userProfileResult?.error) {
+      console.error(userProfileResult.error);
       return;
+    } else if (userProfileResult?.data) {
+      setProfile(userProfileResult.data);
     }
-    setProfile(data);
-  }, [supabaseClient, user]);
+  }, [user, userProfile]);
 
   useEffect(() => {
     if (!profile) {
-      void updateProfile();
+      void fetchProfile();
     }
-  }, [profile, updateProfile]);
+  }, [profile, fetchProfile]);
+
+  const updateProfile = async ({ username }: { username: string }) => {
+    const result = await supabaseUpdateProfile({ username });
+    if (result?.error) {
+      return { error: result.error };
+    } else {
+      setProfile((prev) => ({ ...prev, username }));
+    }
+  };
 
   const clearProfile = () => setProfile(null);
 

@@ -1,20 +1,20 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
-import type { Database } from "@/db/types";
+import { useUser } from "@supabase/auth-helpers-react";
 import { UnstlyedList } from "../ui/List";
 import { HStack } from "../ui/Shared";
 import Button from "../ui/Button";
 import { NavItem } from "../ui/Nav";
 import { useUserProfileContext } from "@/context/UserContext";
+import useLogout from "@/lib/supabase/useLogout";
 
-export const HEADER_HEIGH_PX = "70px";
+export const HEADER_HEIGHT_PX = "70px";
 
 const StyledHeader = styled.header`
   background-color: ${({ theme }) => theme.colors.slate[300]};
   color: ${({ theme }) => theme.colors.slate[800]};
-  height: ${HEADER_HEIGH_PX};
+  height: ${HEADER_HEIGHT_PX};
   display: flex;
   align-items: center;
   box-shadow: 0px 8px 20px rgb(0 0 0 / 5%);
@@ -90,13 +90,13 @@ const LoggedOutContent: React.FC = () => {
 };
 
 const Header: React.FC = () => {
-  const supabaseClient = useSupabaseClient<Database>();
+  const logout = useLogout();
   const router = useRouter();
   const user = useUser();
   const { profile, clearProfile } = useUserProfileContext();
 
   const onLogoutButtonClick = async () => {
-    await supabaseClient.auth.signOut();
+    await logout();
     clearProfile();
     router.push("/");
   };

@@ -2,7 +2,7 @@ import Head from "next/head";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useUser } from "@supabase/auth-helpers-react";
 import Button from "@/components/ui/Button";
 import Form, {
   ErrorMessage,
@@ -10,11 +10,12 @@ import Form, {
   InfoMessage,
 } from "@/components/ui/Form";
 import Input, { InputGroup } from "@/components/ui/Input";
-import type { Database } from "@/db/types";
 import { Section } from "@/components/ui/Shared";
 import { useState } from "react";
 import { getDirtyFields } from "@/lib/utils/form";
 import { useUserProfileContext } from "@/context/UserContext";
+import type { NextPage } from "next";
+import useUpdateUserAuth from "@/lib/supabase/useUpdateUserAuth";
 
 const schema = z.object({
   username: z.string().min(3),
@@ -25,9 +26,10 @@ const schema = z.object({
 
 type ValidationSchema = z.infer<typeof schema>;
 
-const MyAccount = () => {
+const MyAccount: NextPage = () => {
   const user = useUser();
   const { profile, updateProfile } = useUserProfileContext();
+  const updateUserAuth = useUpdateUserAuth();
   const {
     register,
     handleSubmit,
@@ -40,7 +42,6 @@ const MyAccount = () => {
       username: profile?.username ?? "",
     },
   });
-  const supabaseClient = useSupabaseClient<Database>();
   const [error, setError] = useState<string | null>(null);
   const [showChangeEmailSuccessMessage, setShowChangeEmailSuccessMessage] =
     useState(false);
@@ -56,16 +57,12 @@ const MyAccount = () => {
     )
       return;
     const { email, password, username } = formData;
-    const authDataToUpdate: { email?: string; password?: string } = {};
     const shouldUpdateAuthData = email || password;
-    if (email) authDataToUpdate["email"] = email;
-    if (password) authDataToUpdate["password"] = password;
     try {
       // Update user auth data
       if (shouldUpdateAuthData) {
-        const { data, error: authDataError } =
-          await supabaseClient.auth.updateUser(authDataToUpdate);
-        if (authDataError) {
+        const updateUserAuthResult = await updateUserAuth({ email, password });
+        if (updateUserAuthResult?.error) {
           setError("Something went wrong. Please try again later.");
           return;
         } else {
@@ -74,15 +71,10 @@ const MyAccount = () => {
         }
       }
       // Update user profile
-      const { error: profileDataError } = await supabaseClient
-        .from("profiles")
-        .update({ username })
-        .eq("user_id", user.id);
-      if (profileDataError) {
+      const updateUserProfileResult = await updateProfile({ username });
+      if (updateUserProfileResult?.error) {
         setError("Something went wrong. Please try again later.");
         return;
-      } else {
-        void updateProfile();
       }
       reset({ email: "", password: "" });
     } catch (error) {
