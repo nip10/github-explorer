@@ -3,6 +3,10 @@
 This is a simple app that allows you to search for GitHub repositories and bookmark them.
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+This project was created as a code challenge for [Sword Health](https://swordhealth.com/).
+
+Check it out live at [https://github-explorer-ten.vercel.app/](https://github-explorer-ten.vercel.app/);
+
 ## Getting Started
 
 Install dependencies:
@@ -32,7 +36,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - HTTP Client: [Ky](https://github.com/sindresorhus/ky)
 - GitHub API Client: [Octokit](https://octokit.github.io/rest.js/v18)
 
-## Supabase
+## Supabase Setup
 
 - Run the `.sql` files in the Supabase SQL Editor.
 - Enable Insert & Delete replication for the `bookmarks` table (Database > Replication > supabase_realtime)
@@ -43,4 +47,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ### My approach to code challenges
 
 - I like to have a time limit for code challenges. I try to have a good balance between getting a good result and not spending too much time on it.
-- I like to explore and learn new libraries and tools. I find that this is a good oportunity to learn and improve my skills, and always take something new with me regardless of the outcome.
+- I like to explore and learn new libraries and tools. I find that this is a good oportunity to learn and improve my skills, and always take something new with me regardless of the outcome. This may result in some code that is not production ready, or that I would not use in a real project, but I think it's worth it.
+
+### Decisions, Improvements & Others
+
+- The homepage is public, but the bookmarks feature is private.
+- Tried out Supabase (a Firebase open-source alternative) for authentication and database (and some "exotic" features like realtime replication and row level security).
+- The bookmarks are stored in the database, so they are not lost when the user logs out.
+- The bookmarks list "My Bookmarks", after the first load, is updated in realtime via Supabase's realtime replication. (for fun, this could just use the Bookmarks Context, but I wanted to try out the replication feature)
+- Ended up not using a GitHub token, since the API is public and the rate limit is high enough. However, this was implemented in the backend, so it's easy to add it later while keeping the token secure.
+- The OpenGraph images for the repositories has a low rate limit, so behare of that.
+- Improve error handling and feedback to the user.
+- Add responsiveness
+- Make UI components more generic and reusable
+- Deployed to Vercel via GitHub integration

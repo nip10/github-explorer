@@ -4,36 +4,57 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import Button from "@/components/ui/Button";
-import Form, { ErrorMessage, FormLabel } from "@/components/ui/Form";
+import Form, {
+  ErrorMessage,
+  FormLabel,
+  InfoMessage,
+} from "@/components/ui/Form";
 import Input, { InputGroup } from "@/components/ui/Input";
 import type { Database } from "@/db/types";
 import { Section } from "@/components/ui/Shared";
 import { useState } from "react";
+import { getDirtyFields } from "@/lib/utils/form";
+import { useUserProfileContext } from "@/context/UserContext";
 
 const schema = z.object({
   username: z.string().min(3),
-  email: z.string().min(6).optional(),
-  password: z.string().min(6).optional(),
+  // https://github.com/colinhacks/zod/issues/310#issuecomment-794533682
+  email: z.string().optional().or(z.literal("")),
+  password: z.string().min(6).optional().or(z.literal("")),
 });
 
 type ValidationSchema = z.infer<typeof schema>;
 
 const MyAccount = () => {
+  const user = useUser();
+  const { profile, updateProfile } = useUserProfileContext();
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, dirtyFields },
   } = useForm<ValidationSchema>({
     resolver: zodResolver(schema),
+    values: {
+      email: user?.email,
+      username: profile?.username ?? "",
+    },
   });
   const supabaseClient = useSupabaseClient<Database>();
-  const user = useUser();
   const [error, setError] = useState<string | null>(null);
+  const [showChangeEmailSuccessMessage, setShowChangeEmailSuccessMessage] =
+    useState(false);
 
   const processForm: SubmitHandler<ValidationSchema> = async (formData) => {
     if (!user) return;
     setError(null);
+    const dirty = getDirtyFields(dirtyFields, formData);
+    // Avoid unnecessary requests
+    if (
+      (Array.isArray(dirty) && dirty.length === 0) ||
+      Object.keys(dirty as Record<string, unknown>).length === 0
+    )
+      return;
     const { email, password, username } = formData;
     const authDataToUpdate: { email?: string; password?: string } = {};
     const shouldUpdateAuthData = email || password;
@@ -42,29 +63,29 @@ const MyAccount = () => {
     try {
       // Update user auth data
       if (shouldUpdateAuthData) {
-        const { error: authDataError } = await supabaseClient.auth.updateUser(
-          authDataToUpdate
-        );
+        const { data, error: authDataError } =
+          await supabaseClient.auth.updateUser(authDataToUpdate);
         if (authDataError) {
-          console.log("Error updating user auth data", authDataError);
           setError("Something went wrong. Please try again later.");
           return;
+        } else {
+          setShowChangeEmailSuccessMessage(true);
+          // TODO: It may be required to force update the user's token/jwt on pw change
         }
-        // TODO: Force update user token
       }
       // Update user profile
       const { error: profileDataError } = await supabaseClient
         .from("profiles")
         .update({ username })
-        .eq("id", user.id);
+        .eq("user_id", user.id);
       if (profileDataError) {
-        console.log("Error updating user profile", profileDataError);
         setError("Something went wrong. Please try again later.");
         return;
+      } else {
+        void updateProfile();
       }
       reset({ email: "", password: "" });
     } catch (error) {
-      console.log("Error updating user data", error);
       setError("Something went wrong. Please try again later.");
     }
   };
@@ -92,7 +113,7 @@ const MyAccount = () => {
           <InputGroup>
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
-              {...register("email", { required: false, minLength: 6 })}
+              {...register("email", { required: false })}
               name="email"
               type="email"
               id="email"
@@ -101,10 +122,17 @@ const MyAccount = () => {
               <ErrorMessage>{errors.email?.message}</ErrorMessage>
             )}
           </InputGroup>
+          {showChangeEmailSuccessMessage && (
+            <InfoMessage>
+              You&apos;ll receive an email on both the old and new email
+              addresses to confirm the change.
+            </InfoMessage>
+          )}
           <InputGroup>
-            <FormLabel htmlFor="password">Password</FormLabel>
+            <FormLabel htmlFor="password">New Password</FormLabel>
             <Input
-              {...register("password", { required: false, minLength: 6 })}
+              {...register("password", { required: false })}
+              autoComplete="off"
               name="password"
               type="password"
               id="password"

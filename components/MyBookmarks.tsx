@@ -1,14 +1,17 @@
-import useBookmarks from "@/lib/supabase/useBookmarks";
 import useDeleteBookmark from "@/lib/supabase/useDeleteBookmark";
 import Carousel, { type SlideType } from "@/components/ui/Carousel";
 import { EmptyState, Section } from "@/components/ui/Shared";
+import { useBookmarksContext } from "@/context/BookmarksContext";
 
 const MyBookmarks: React.FC = () => {
-  const bookmarks = useBookmarks();
+  const { bookmarks } = useBookmarksContext();
   const deleteBookmark = useDeleteBookmark();
-  const carouselSlides = bookmarks.map((bookmark) => ({
+  const carouselSlides: SlideType[] = bookmarks.map((bookmark) => ({
     img: bookmark.repo_image_url,
     alt: `Summary of ${bookmark.repo_owner}/${bookmark.repo_name} repository information`,
+    metadata: {
+      bookmarked: true,
+    },
   }));
 
   const onSlideClick = (slide: SlideType, index: number) => {
@@ -20,7 +23,6 @@ const MyBookmarks: React.FC = () => {
 
   const onBookmarkClick = async (slide: SlideType, index: number) => {
     const bookmarkId = bookmarks[index].bookmark_id;
-    console.log("bookmarkId", bookmarkId);
     if (bookmarkId) {
       await deleteBookmark(bookmarkId);
     }

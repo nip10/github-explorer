@@ -13,5 +13,10 @@ const ErrorMessage = styled.span`
   color: ${({ theme }) => theme.colors.red[600]};
 `;
 
-export { FormLabel, ErrorMessage };
+const InfoMessage = styled.span`
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.colors.slate[600]};
+`;
+
+export { FormLabel, ErrorMessage, InfoMessage };
 export default Form;

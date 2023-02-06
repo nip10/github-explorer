@@ -12,16 +12,19 @@ interface GetRepositoriesRequestParams {
   sortBy: RepositorySortBy;
 }
 
+export interface Repository {
+  repoName: string;
+  repoOwner: string;
+  fullName: string;
+  image: string;
+  url: string;
+  bookmarkId?: string;
+}
+
 interface GetRepositoriesResponse {
   repositories: {
     totalCount: number;
-    items: {
-      repoName: string;
-      repoOwner: string;
-      fullName: string;
-      image: string;
-      url: string;
-    }[];
+    items: Repository[];
   };
 }
 

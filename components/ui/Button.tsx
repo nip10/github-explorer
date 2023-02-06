@@ -3,7 +3,11 @@ import styled, { css, type DefaultTheme } from "styled-components";
 
 type ButtonVariant = "primary" | "secondary" | "link";
 
-const variantStyles = (theme: DefaultTheme, variant: ButtonVariant) =>
+const variantStyles = (
+  theme: DefaultTheme,
+  variant: ButtonVariant,
+  active?: boolean
+) =>
   ({
     primary: css`
       background: ${({ theme }) => theme.colors.slate[900]};
@@ -30,18 +34,23 @@ const variantStyles = (theme: DefaultTheme, variant: ButtonVariant) =>
     link: css`
       background-color: transparent;
       color: ${theme.colors.slate[900]};
-      /* text-decoration: underline; */
-      /* text-underline-offset: 0.2rem; */
-      &:hover {
-        background-color: ${theme.colors.slate[200]};
-      }
+      ${active &&
+      css`
+        text-decoration: underline;
+        text-underline-offset: 0.2rem;
+        text-decoration-thickness: 0.1rem;
+        text-decoration-color: ${theme.colors.slate[900]};
+      `}
       &:disabled {
         color: ${theme.colors.slate[500]};
       }
     `,
   }[variant]);
 
-type ButtonProps = PropsWithChildren<{ variant?: ButtonVariant }>;
+type ButtonProps = PropsWithChildren<{
+  variant?: ButtonVariant;
+  active?: boolean;
+}>;
 
 const Button = styled.button<ButtonProps>`
   border: none;
@@ -69,7 +78,8 @@ const Button = styled.button<ButtonProps>`
   padding-inline-end: 1rem;
   cursor: pointer;
   font-family: inherit;
-  ${({ theme, variant = "primary" }) => variantStyles(theme, variant)}
+  ${({ theme, variant = "primary", active }) =>
+    variantStyles(theme, variant, active)}
 `;
 
 export default Button;

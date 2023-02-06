@@ -33,7 +33,7 @@ export interface Database {
           repo_image_url: string;
         };
         Insert: {
-          bookmark_id?: number;
+          bookmark_id?: string;
           user_id?: string;
           repo_owner?: string;
           repo_name?: string;
@@ -41,7 +41,7 @@ export interface Database {
           repo_image_url?: string;
         };
         Update: {
-          bookmark_id?: number;
+          bookmark_id?: string;
           user_id?: string;
           repo_owner?: string;
           repo_name?: string;
@@ -49,7 +49,7 @@ export interface Database {
           repo_image_url?: string;
         };
         Delete: {
-          bookmark_id?: number;
+          bookmark_id: string;
         };
       };
     };

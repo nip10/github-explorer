@@ -1,6 +1,6 @@
+import { useCallback } from "react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import type { Database } from "@/db/types";
-import { useCallback } from "react";
 
 const useCreateBookmark = () => {
   const supabaseClient = useSupabaseClient<Database>();
@@ -15,13 +15,17 @@ const useCreateBookmark = () => {
       if (!user) {
         return;
       }
-      await supabaseClient.from("bookmarks").insert({
-        user_id: user.id,
-        repo_owner: repoOwner,
-        repo_name: repoName,
-        repo_url: repoUrl,
-        repo_image_url: repoUrlImage,
-      });
+      const data = await supabaseClient
+        .from("bookmarks")
+        .insert({
+          user_id: user.id,
+          repo_owner: repoOwner,
+          repo_name: repoName,
+          repo_url: repoUrl,
+          repo_image_url: repoUrlImage,
+        })
+        .select();
+      return data;
     },
     [supabaseClient, user]
   );

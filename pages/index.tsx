@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useUser } from "@supabase/auth-helpers-react";
 import MyBookmarks from "@/components/MyBookmarks";
 import Topics from "@/components/Topics";
+import { BookmarksProvider } from "@/context/BookmarksContext";
 
 const Home: NextPage = () => {
   const user = useUser();
@@ -12,8 +13,10 @@ const Home: NextPage = () => {
       <Head>
         <title>Discovery - GitHub Explorer</title>
       </Head>
-      {user && <MyBookmarks />}
-      <Topics />
+      <BookmarksProvider>
+        {user && <MyBookmarks />}
+        <Topics />
+      </BookmarksProvider>
     </>
   );
 };

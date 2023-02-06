@@ -8,7 +8,6 @@ const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<
     Database["public"]["Tables"]["bookmarks"]["Row"][]
   >([]);
-  console.log("bookmarks", bookmarks);
 
   // Initial load
   useEffect(() => {
@@ -35,7 +34,6 @@ const useBookmarks = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "bookmarks" },
         (payload) => {
-          console.log("INSERT", payload);
           setBookmarks((prevBookmarks) => [...prevBookmarks, payload.new]);
         }
       )
@@ -43,7 +41,6 @@ const useBookmarks = () => {
         "postgres_changes",
         { event: "DELETE", schema: "public", table: "bookmarks" },
         (payload) => {
-          console.log("DELETE", payload);
           setBookmarks((prevBookmarks) =>
             prevBookmarks.filter(
               (b) => b.bookmark_id !== payload.old.bookmark_id

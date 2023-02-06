@@ -1,6 +1,6 @@
+import { useCallback } from "react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import type { Database } from "@/db/types";
-import { useCallback } from "react";
 
 const useDeleteBookmark = () => {
   const supabaseClient = useSupabaseClient<Database>();

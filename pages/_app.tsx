@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import MainLayout from "@/components/layout/MainLayout";
 import { myTheme } from "@/styles/theme";
 import GlobalStyles from "@/styles/global";
+import { UserProvider } from "@/context/UserContext";
 
 function MyApp({
   Component,
@@ -49,9 +50,11 @@ function MyApp({
               content="width=device-width, initial-scale=1"
             />
           </Head>
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
+          <UserProvider>
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </UserProvider>
         </ThemeProvider>
       </SessionContextProvider>
     </QueryClientProvider>

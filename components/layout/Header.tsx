@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,12 +7,14 @@ import { UnstlyedList } from "../ui/List";
 import { HStack } from "../ui/Shared";
 import Button from "../ui/Button";
 import { NavItem } from "../ui/Nav";
-import useUserProfile from "@/lib/supabase/useUserProfile";
+import { useUserProfileContext } from "@/context/UserContext";
+
+export const HEADER_HEIGH_PX = "70px";
 
 const StyledHeader = styled.header`
   background-color: ${({ theme }) => theme.colors.slate[300]};
   color: ${({ theme }) => theme.colors.slate[800]};
-  height: 80px;
+  height: ${HEADER_HEIGH_PX};
   display: flex;
   align-items: center;
   box-shadow: 0px 8px 20px rgb(0 0 0 / 5%);
@@ -44,11 +45,12 @@ const LoggedInContent: React.FC<LoggedInContentProps> = ({
   username,
   onLogoutButtonClick,
 }) => {
+  const router = useRouter();
   return (
     <>
       <Link href="/myaccount" passHref legacyBehavior>
-        <Button variant="link" as="a">
-          {username ?? "Loading..."}
+        <Button variant="link" as="a" active={router.pathname === "/myaccount"}>
+          {username}
         </Button>
       </Link>
       <Button variant="link" onClick={onLogoutButtonClick}>
@@ -77,12 +79,13 @@ const LoggedOutContent: React.FC = () => {
 
 const Header: React.FC = () => {
   const supabaseClient = useSupabaseClient<Database>();
-  const user = useUser();
   const router = useRouter();
-  const userProfile = useUserProfile();
+  const user = useUser();
+  const { profile, clearProfile } = useUserProfileContext();
 
   const onLogoutButtonClick = async () => {
     await supabaseClient.auth.signOut();
+    clearProfile();
     router.push("/");
   };
 
@@ -94,7 +97,11 @@ const Header: React.FC = () => {
           <nav>
             <UnstlyedList>
               <NavItem active={router.pathname === "/"}>
-                <Link href="/">Discovery</Link>
+                <Link href="/" passHref legacyBehavior>
+                  <Button variant="link" as="a">
+                    Discovery
+                  </Button>
+                </Link>
               </NavItem>
             </UnstlyedList>
           </nav>
@@ -102,7 +109,7 @@ const Header: React.FC = () => {
         <HStack gap="1rem">
           {user ? (
             <LoggedInContent
-              username={userProfile?.username}
+              username={profile?.username}
               onLogoutButtonClick={onLogoutButtonClick}
             />
           ) : (
