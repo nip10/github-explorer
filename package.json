@@ -1,6 +1,19 @@
 {
   "name": "github-explorer",
+  "license": "MIT",
   "version": "0.1.0",
+  "author": {
+    "name": "Diogo Cardoso",
+    "email": "hi@diogocardoso.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nip10/github-explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nip10/github-explorer/issues"
+  },
+  "homepage": "https://github.com/nip10/github-explorer#readme",
   "private": true,
   "scripts": {
     "dev": "next dev",

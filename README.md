@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 This project was created as a code challenge for [Sword Health](https://swordhealth.com/).
 
-Check it out live at [https://github-explorer-lake-two.vercel.app/](https://github-explorer-lake-two.vercel.app/);
+Check it out live at [https://github-explorer-lake-two.vercel.app/](https://github-explorer-lake-two.vercel.app/)
 
 ## Getting Started
 
@@ -37,10 +37,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Async state management [TanStack Query](https://tanstack.com/query/latest)
 - HTTP Client: [Ky](https://github.com/sindresorhus/ky)
 - GitHub API Client: [Octokit](https://octokit.github.io/rest.js/v18)
+- Testing: [Jest](https://jestjs.io/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
 
 ## Supabase Setup
 
-- Run the `.sql` files in the Supabase SQL Editor.
+- Run **all** `.sql` files included in the `/db` folder, in the Supabase SQL Editor.
 - Enable Insert & Delete replication for the `bookmarks` table (Database > Replication > supabase_realtime)
 - Auto generate database types using the Supabase CLI
 
@@ -60,16 +61,19 @@ Make sure to add the required env keys to the Vercel environment variables.
 
 - The homepage is public, but the bookmarks feature is private.
 - Tried out Supabase (a Firebase open-source alternative) for authentication and database (and some "exotic" features like realtime replication and row level security).
-- The bookmarks are stored in the database, so they are not lost when the user logs out.
-- The bookmarks list "My Bookmarks", after the first load, is updated in realtime via Supabase's realtime replication. (for fun, this could just use the Bookmarks Context, but I wanted to try out the replication feature)
+- The bookmarks are stored in the database.
+- The bookmarks list "My Bookmarks", after the first load, is updated in realtime via Supabase's realtime replication. (for fun, this could just use local stage, but I wanted to try out the replication feature)
 - The selected topics and the sorting of each topic are saved in local storage.
-- Ended up not using a GitHub token, since the API is public and the rate limit is high enough. However, this was implemented in the backend, so it's easy to add it later while keeping the token secure.
-- The OpenGraph images for the repositories has a low rate limit, so behare of that.
+- The api that provides the OpenGraph images for the repositories has a low rate limit, so behare of that.
 - Improve error handling and feedback to the user.
 - Improve responsiveness. Its usable on mobile, but not great. The bookmark feature depends on hover which is not available on mobile, so I ended up showing the bookmark toggle by default on mobile.
 - Make UI components more generic and reusable
 - Deployed to Vercel via GitHub integration
 - Change the GitHub API client to use GraphQL to reduce data usage and improve performance
-- Improve cache settings for the opengraph images
-- Improve lazy loading of images, add a blur up effect or a placeholder
+- Improve UX on the image loading, add a blur up effect or a placeholder
 - Add infinite loading to the carousel
+- Improve tests (organize mocks, add more tests, add e2e, etc)
+
+## License
+
+MIT License
