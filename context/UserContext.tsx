@@ -32,10 +32,7 @@ const UserProvider = ({ children }: React.PropsWithChildren) => {
       return;
     }
     const userProfileResult = await userProfile();
-    if (userProfileResult?.error) {
-      console.error(userProfileResult.error);
-      return;
-    } else if (userProfileResult?.data) {
+    if (userProfileResult?.data) {
       setProfile(userProfileResult.data);
     }
   }, [user, userProfile]);
