@@ -59,8 +59,9 @@ Make sure to add the required env keys to the Vercel environment variables.
 
 ### Decisions, Improvements & Others
 
-- The homepage is public, but the bookmarks feature is private.
 - Tried out Supabase (a Firebase open-source alternative) for authentication and database (and some "exotic" features like realtime replication and row level security).
+- Tried out Playright (a Puppeteer/Cypress alternative) for E2E testing.
+- The homepage is public, but the bookmarks feature is private.
 - The bookmarks are stored in the database.
 - The bookmarks list "My Bookmarks", after the first load, is updated in realtime via Supabase's realtime replication. (for fun, this could just use local stage, but I wanted to try out the replication feature)
 - The selected topics and the sorting of each topic are saved in local storage.
@@ -73,6 +74,7 @@ Make sure to add the required env keys to the Vercel environment variables.
 - Improve UX on the image loading, add a blur up effect or a placeholder
 - Add infinite loading to the carousel
 - Improve tests (organize mocks, add more tests, add e2e, etc)
+- E2E tests require setup (create a user without bookmarks)
 
 ## License
 

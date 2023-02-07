@@ -29,7 +29,7 @@ const MyBookmarks: React.FC = () => {
   };
 
   return (
-    <Section>
+    <Section id="my-bookmarks">
       <h2>My Bookmarks</h2>
       {bookmarks.length > 0 ? (
         <Carousel

@@ -7,7 +7,7 @@ import useCreateBookmark from "@/lib/supabase/useCreateBookmark";
 import useDeleteBookmark from "@/lib/supabase/useDeleteBookmark";
 import Carousel, { type SlideType } from "@/components/ui/Carousel";
 import Dropdown, { type DropdownOption } from "@/components/ui/Dropdown";
-import { HStack, LoadingState } from "@/components/ui/Shared";
+import { HStack, LoadingState, VStack } from "@/components/ui/Shared";
 import { useBookmarksContext } from "@/context/BookmarksContext";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
@@ -81,7 +81,7 @@ const Topic: React.FC<TopicProps> = ({ topic }) => {
   };
 
   return (
-    <>
+    <VStack id={`topic-${topic.toLowerCase()}`}>
       <HStack>
         <h2>Top {topic}</h2>
         <Dropdown
@@ -104,7 +104,7 @@ const Topic: React.FC<TopicProps> = ({ topic }) => {
           withBookmarks={!!user}
         />
       )}
-    </>
+    </VStack>
   );
 };
 
