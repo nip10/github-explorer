@@ -1,8 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { deleteBookmarks } from "@/tests/supabase-utils";
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env.local" });
 
-const { TEST_EMAIL, TEST_PASSWORD } = process.env;
+const { TEST_EMAIL, TEST_PASSWORD, TEST_USER_ID } = process.env;
 
 if (!TEST_EMAIL || !TEST_PASSWORD) {
   throw new Error(
@@ -10,12 +11,7 @@ if (!TEST_EMAIL || !TEST_PASSWORD) {
   );
 }
 
-test.use({
-  browserName: "chromium",
-});
-
-test("should bookmark repo", async ({ page, isMobile, browserName }) => {
-  test.skip(!!isMobile, "ugly hack to run this only once");
+test.beforeEach(async ({ page }) => {
   // PRE TEST - Login
   // Start from the login page
   await page.goto("/auth/login");
@@ -27,7 +23,20 @@ test("should bookmark repo", async ({ page, isMobile, browserName }) => {
   // The new URL should be "/"
   await expect(page).toHaveURL("/");
   await page.waitForLoadState("networkidle");
-  // ACTUAL TEST
+});
+
+test.afterEach(async ({ page }) => {
+  // POST TEST - Delete data
+  // We do this check here because the env var is not defined until the global setup runs
+  if (!TEST_USER_ID) {
+    throw new Error("Missing TEST_USER_ID environment variable from E2E setup");
+  }
+  // Delete bookmarks
+  await deleteBookmarks(TEST_USER_ID!);
+});
+
+test("should bookmark repo", async ({ page, isMobile, browserName }) => {
+  // test.skip(!!isMobile, "ugly hack to run this only once");
   // Click on the first slide bookmark icon
   const firstSlide = await page.waitForSelector(
     "#topic-vue > div:nth-child(2) > div > div > div:nth-child(1)"

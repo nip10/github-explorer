@@ -73,8 +73,7 @@ Make sure to add the required env keys to the Vercel environment variables.
 - Change the GitHub API client to use GraphQL to reduce data usage and improve performance
 - Improve UX on the image loading, add a blur up effect or a placeholder
 - Add infinite loading to the carousel
-- Improve tests (organize mocks, add more tests, add e2e, etc)
-- E2E tests require setup (create a user without bookmarks)
+- Improve tests (add more tests, improve mocks, e2e, etc)
 
 ## License
 

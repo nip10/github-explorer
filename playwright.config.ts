@@ -73,5 +73,7 @@ const config: PlaywrightTestConfig = {
     //   use: devices["iPhone 12"],
     // },
   ],
+  globalSetup: require.resolve("./tests/global-setup"),
+  globalTeardown: require.resolve("./tests/global-teardown"),
 };
 export default config;
