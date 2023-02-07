@@ -49,15 +49,15 @@ const MyAccount: NextPage = () => {
   const processForm: SubmitHandler<ValidationSchema> = async (formData) => {
     if (!user) return;
     setError(null);
-    const dirty = getDirtyFields(dirtyFields, formData);
+    const dirty = getDirtyFields(dirtyFields, formData) as {
+      email?: string;
+      password?: string;
+      username?: string;
+    };
     // Avoid unnecessary requests
-    if (
-      (Array.isArray(dirty) && dirty.length === 0) ||
-      Object.keys(dirty as Record<string, unknown>).length === 0
-    )
-      return;
+    if (Object.keys(dirty).length === 0) return;
     const { email, password, username } = formData;
-    const shouldUpdateAuthData = email || password;
+    const shouldUpdateAuthData = dirty.email || dirty.password;
     try {
       // Update user auth data
       if (shouldUpdateAuthData) {
