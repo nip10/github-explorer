@@ -9,15 +9,17 @@ import { NavItem } from "../ui/Nav";
 import { useUserProfileContext } from "@/context/UserContext";
 import useLogout from "@/lib/supabase/useLogout";
 
-export const HEADER_HEIGHT_PX = "70px";
-
 const StyledHeader = styled.header`
+  --header_height: 70px;
   background-color: ${({ theme }) => theme.colors.slate[300]};
   color: ${({ theme }) => theme.colors.slate[800]};
-  height: ${HEADER_HEIGHT_PX};
+  height: var(--header_height);
   display: flex;
   align-items: center;
   box-shadow: 0px 8px 20px rgb(0 0 0 / 5%);
+  @media (max-width: 768px) {
+    --header_height: 100px;
+  }
 `;
 
 const Container = styled.div`
