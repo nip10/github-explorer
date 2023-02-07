@@ -30,6 +30,10 @@ function MyApp({
             retry: 2,
             // retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
             refetchOnWindowFocus: false,
+            // data is fairly static, so we can cache it for a long time
+            // cacheTime must be more than staleTime
+            staleTime: 60 * (60 * 1000), // 60 minutes
+            cacheTime: 90 * (60 * 1000), // 90 mins
           },
         },
       })
