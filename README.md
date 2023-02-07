@@ -7,7 +7,7 @@ This project was created as a code challenge for [Sword Health](https://swordhea
 
 Check it out live at [https://github-explorer-lake-two.vercel.app/](https://github-explorer-lake-two.vercel.app/)
 
-## Getting Started
+## Development
 
 1. Install dependencies:
 
@@ -25,6 +25,20 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Testing
+
+Run the component tests:
+
+```bash
+yarn test
+```
+
+Run the E2E tests:
+
+```bash
+yarn test:e2e
+```
+
 ## Libraries & Tools
 
 - Framework: [Next.js](https://nextjs.org/)
@@ -37,7 +51,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - Async state management [TanStack Query](https://tanstack.com/query/latest)
 - HTTP Client: [Ky](https://github.com/sindresorhus/ky)
 - GitHub API Client: [Octokit](https://octokit.github.io/rest.js/v18)
-- Testing: [Jest](https://jestjs.io/) & [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
+- Testing: [Jest](https://jestjs.io/), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) and [Playwright](https://playwright.dev/)
 
 ## Supabase Setup
 
@@ -61,18 +75,18 @@ Make sure to add the required env keys to the Vercel environment variables.
 
 - Tried out Supabase (a Firebase open-source alternative) for authentication and database (and some "exotic" features like realtime replication and row level security).
 - Tried out Playright (a Puppeteer/Cypress alternative) for E2E testing.
-- The homepage is public, but the bookmarks feature is private.
+- The homepage is public, but the bookmarks feature is private - meaning anyone can explore the repositories, but only authenticated users can bookmark them.
 - The bookmarks are stored in the database.
 - The bookmarks list "My Bookmarks", after the first load, is updated in realtime via Supabase's realtime replication. (for fun, this could just use local stage, but I wanted to try out the replication feature)
-- The selected topics and the sorting of each topic are saved in local storage.
+- The selected topics and the sorting of each topic are saved in local storage, individually.
 - The api that provides the OpenGraph images for the repositories has a low rate limit, so behare of that.
 - Improve error handling and feedback to the user.
 - Improve responsiveness. Its usable on mobile, but not great. The bookmark feature depends on hover which is not available on mobile, so I ended up showing the bookmark toggle by default on mobile.
 - Make UI components more generic and reusable
 - Deployed to Vercel via GitHub integration
 - Change the GitHub API client to use GraphQL to reduce data usage and improve performance
-- Improve UX on the image loading, add a blur up effect or a placeholder
-- Add infinite loading to the carousel
+- Improve UX on the image loading, add a blur up effect or a placeholder. Or SSR.
+- Add infinite loading (useInfinityQuery + page param + embla async) to the carousel, this is currently limited to 10 items.
 - Improve tests (add more tests, improve mocks, e2e, etc)
 
 ## License
