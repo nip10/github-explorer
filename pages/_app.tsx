@@ -12,6 +12,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import { myTheme } from "@/styles/theme";
 import GlobalStyles from "@/styles/global";
 import { UserProvider } from "@/context/UserContext";
+import { Analytics } from "@vercel/analytics/react";
 
 function MyApp({
   Component,
@@ -57,6 +58,7 @@ function MyApp({
           <UserProvider>
             <MainLayout>
               <Component {...pageProps} />
+              <Analytics />
             </MainLayout>
           </UserProvider>
         </ThemeProvider>
