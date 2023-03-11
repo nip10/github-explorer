@@ -3,7 +3,7 @@
 This is a simple app that allows you to search for GitHub repositories and bookmark them.
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-This project was created as a code challenge for [Sword Health](https://swordhealth.com/).
+This project was created as a code challenge for --redacted--.
 
 Check it out live at [https://github-explorer-lake-two.vercel.app/](https://github-explorer-lake-two.vercel.app/)
 
