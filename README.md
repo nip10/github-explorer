@@ -1,5 +1,7 @@
 # GitHub Explorer
 
+> Warning: This project was used to experiment and learn new libs, tools and services. Some parts of the code may not be production ready, and are definitely not optimized amd/or over-engineered.
+
 This is a simple app that allows you to search for GitHub repositories and bookmark them.
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
